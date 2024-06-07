@@ -19,3 +19,53 @@
         @Html.Raw(@Model.Post.Content)
     </section>
 </article>
+
+<!-- Comments section-->
+<section class="mb-5">
+    <div class="card bg-light">
+        <div class="card-body">
+            <!-- Comment form-->
+            <form id="form-add-comment" method="post" class="mb-4">
+
+                <input type="hidden" asp-for="CommentForm!.PostId" value="@Model.Post.PostId" />
+
+                <div class="mb-3">
+                    <input type="text" value="" asp-for="CommentForm!.Author" class="form-control" placeholder="Enter your name" maxlength="100" />
+                    <span asp-validation-for="CommentForm!.Author" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <textarea rows="3" class="form-control" asp-for="CommentForm!.Content" placeholder="Join the discussion and leave a comment!"></textarea>
+                    <span asp-validation-for="CommentForm!.Content" class="text-danger"></span>
+                </div>
+
+                <div class="mb3">
+                    <button type="submit" class="btn btn-primary">Add Comment</button>
+                </div>
+
+            </form>
+            <hr />
+            <h4 class="mb-4">@Model.Post.Comments.Count() Comment(s)</h4>
+            <div id="comment-list">
+                @foreach (var item in Model.Post.Comments)
+                {
+                    <div class="d-flex mb-4">
+                        <div class="flex-shrink-0">
+                            <img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." />
+                        </div>
+                        <div class="ms-3">
+                            <div class="fw-bold"> @item.Author </div>
+                            <div class="small text-muted">Published on @item.PublishedOn</div>
+                            @item.Content
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+}

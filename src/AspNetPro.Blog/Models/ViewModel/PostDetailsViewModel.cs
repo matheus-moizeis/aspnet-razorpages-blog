@@ -1,4 +1,6 @@
-﻿namespace AspNetPro.Blog.Models.ViewModel;
+﻿using AspNetPro.Blog.Models.Entities;
+
+namespace AspNetPro.Blog.Models.ViewModel;
 
 public record PostDetailsViewModel
 {
@@ -6,4 +8,13 @@ public record PostDetailsViewModel
     public string? Title { get; set; }
     public string? Content { get; set; }
     public string? PublishedOn { get; set; }
+
+    public IEnumerable<CommentItem> Comments { get; set; }
+
+    public record CommentItem
+    {
+        public string? Author { get; set; }
+        public string? PublishedOn { get; set; }
+        public string? Content { get; set; }
+    }
 }

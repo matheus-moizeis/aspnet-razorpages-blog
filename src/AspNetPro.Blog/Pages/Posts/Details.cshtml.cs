@@ -1,4 +1,6 @@
 using AspNetPro.Blog.Infrastructure.Data;
+using AspNetPro.Blog.Models.Entities;
+using AspNetPro.Blog.Models.FormModel;
 using AspNetPro.Blog.Models.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -19,6 +21,12 @@ public class DetailsModel(BlogContext blogContext) : PageModel
                 Title = x.Title,
                 Content = x.Content,
                 PublishedOn = x.PublishedOn.Value.ToShortDateString(),
+                Comments = x.Comments.Select(y => new PostDetailsViewModel.CommentItem
+                {
+                    Author = y.Author,
+                    Content = y.Content,
+                    PublishedOn = y.PublishedOn.ToString("G"),
+                })
             })
             .FirstOrDefaultAsync();
 
@@ -28,5 +36,23 @@ public class DetailsModel(BlogContext blogContext) : PageModel
         }
 
         return Page();
+    }
+
+    [BindProperty]
+    public CommentFormModel CommentForm { get; set; }
+
+    public async Task<IActionResult> OnPost()
+    {
+        var comment = new Comment
+        {
+            Author = CommentForm.Author,
+            Content = CommentForm.Content,
+            Post = await blogContext.Posts.FindAsync(CommentForm.PostId)
+        };
+
+        blogContext.Comments.Add(comment);
+        await blogContext.SaveChangesAsync();
+
+        return RedirectToPage("/Posts/Details", new { postId = CommentForm.PostId});
     }
 }

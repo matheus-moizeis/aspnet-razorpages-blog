@@ -21,5 +21,8 @@ public class PostMap : IEntityTypeConfiguration<Post>
 
         builder.Property(x => x.Content)
             .HasColumnType("NVARCHAR(MAX)");
+
+        builder.Property(x => x.Tags)
+               .HasMaxLength(150);
     }
 }

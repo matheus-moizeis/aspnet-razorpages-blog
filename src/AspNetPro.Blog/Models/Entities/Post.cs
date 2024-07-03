@@ -6,8 +6,9 @@ public class Post
     public string? Title { get; set; }
     public string? Summary { get; set; }
     public string? Content { get; set; }
+    public string? Tags { get; set; }
     public DateTime? PublishedOn { get; set; }
-    public Category Category { get; set; }
+    public Category? Category { get; set; }
 
     public ICollection<Comment> Comments { get; set; } = new List<Comment>();
 }
